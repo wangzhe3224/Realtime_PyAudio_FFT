@@ -67,7 +67,7 @@ class Stream_Reader:
         self.stream = sd.InputStream(
                                     samplerate=self.rate,
                                     blocksize=self.update_window_n_frames,
-                                    device=None,
+                                    device=1,  # None  # input device
                                     channels=1,
                                     dtype=np.float32,
                                     latency='low',

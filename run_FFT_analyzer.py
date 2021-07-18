@@ -27,7 +27,10 @@ def convert_window_ratio(window_ratio):
         return float_ratio
     raise ValueError('window_ratio should be in the format: float/float')
 
+
 def run_FFT_analyzer():
+    import pygame as pg
+    pg.init()
     args = parse_args()
     window_ratio = convert_window_ratio(args.window_ratio)
 
@@ -44,7 +47,7 @@ def run_FFT_analyzer():
                     window_ratio = window_ratio  # Float ratio of the visualizer window. e.g. 24/9
                     )
 
-    fps = 60  #How often to update the FFT features + display
+    fps = 60  # How often to update the FFT features + display
     last_update = time.time()
     while True:
         if (time.time() - last_update) > (1./fps):

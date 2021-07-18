@@ -77,7 +77,7 @@ class Spectrum_Visualizer:
 
     def start(self):
         print("Starting spectrum visualizer...")
-        pygame.init()
+        # pygame.init()
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.screen.fill((self.bg_color,self.bg_color,self.bg_color))
 
@@ -221,3 +221,8 @@ class Spectrum_Visualizer:
         #Draw everything:
         self.screen.blit(pygame.transform.rotate(self.screen, 180), (0, 0))
 
+
+if __name__ == '__main__':
+
+    pygame.init()
+    input('>> ')
