@@ -3,8 +3,18 @@ import time, math, scipy
 from collections import deque
 from scipy.signal import savgol_filter
 
+from numba import jit
 from src.fft import getFFT
 from src.utils import *
+
+
+# @jit(nopython=True)
+def _bin_loop(n_freq_bins: int, fft: np.array, fftx_indices_per_bin: np.array):
+    res = np.zeros(n_freq_bins)
+    for bin_index in range(n_freq_bins):
+        res[bin_index] = np.mean(fft[fftx_indices_per_bin[bin_index]])
+    return res
+
 
 class Stream_Analyzer:
     """
@@ -121,15 +131,15 @@ class Stream_Analyzer:
 
     def update_rolling_stats(self):
         self.rolling_bin_values.append_data(self.frequency_bin_energies)
-        self.bin_mean_values  = np.mean(self.rolling_bin_values.get_buffer_data(), axis=0)
-        self.bin_mean_values  = np.maximum((1-self.equalizer_strength)*np.mean(self.bin_mean_values), self.bin_mean_values)
+        self.bin_mean_values = np.mean(self.rolling_bin_values.get_buffer_data(), axis=0)
+        self.bin_mean_values = np.maximum((1-self.equalizer_strength)*np.mean(self.bin_mean_values), self.bin_mean_values)
 
     def update_features(self, n_bins = 3):
 
         latest_data_window = self.stream_reader.data_buffer.get_most_recent(self.FFT_window_size)
 
         self.fft = getFFT(latest_data_window, self.rate, self.FFT_window_size, log_scale = self.log_features)
-        #Equalize pink noise spectrum falloff:
+        # Equalize pink noise spectrum falloff:
         self.fft = self.fft * self.power_normalization_coefficients
         self.num_ffts += 1
         self.fft_fps  = self.num_ffts / (time.time() - self.stream_reader.stream_start_time)
@@ -147,16 +157,16 @@ class Stream_Analyzer:
         for bin_index in range(self.n_frequency_bins):
             self.frequency_bin_energies[bin_index] = np.mean(self.fft[self.fftx_indices_per_bin[bin_index]])
 
-        #Beat detection ToDo:
-        #https://www.parallelcube.com/2018/03/30/beat-detection-algorithm/
-        #https://github.com/shunfu/python-beat-detector
-        #https://pypi.org/project/vamp/
+        # Beat detection ToDo:
+        # https://www.parallelcube.com/2018/03/30/beat-detection-algorithm/
+        # https://github.com/shunfu/python-beat-detector
+        # https://pypi.org/project/vamp/
 
         return
 
     def get_audio_features(self):
 
-        if self.stream_reader.new_data:  #Check if the stream_reader has new audio data we need to process
+        if self.stream_reader.new_data:  # Check if the stream_reader has new audio data we need to process
             if self.verbose:
                 start = time.time()
 

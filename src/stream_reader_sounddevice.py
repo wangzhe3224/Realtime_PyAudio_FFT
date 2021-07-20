@@ -67,7 +67,7 @@ class Stream_Reader:
         self.stream = sd.InputStream(
                                     samplerate=self.rate,
                                     blocksize=self.update_window_n_frames,
-                                    device=1,  # None  # input device
+                                    device=2,  # TODO: this needs tweak based on the actual devices on PC
                                     channels=1,
                                     dtype=np.float32,
                                     latency='low',

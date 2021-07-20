@@ -5,3 +5,4 @@ pygame
 # PyAudio==0.2.11
 sounddevice
 matplotlib
+numba

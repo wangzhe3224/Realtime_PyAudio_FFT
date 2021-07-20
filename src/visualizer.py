@@ -162,12 +162,12 @@ class Spectrum_Visualizer:
         self.text = self.fps_font.render('Fps: %.1f' %(self.fps), True, (255, 255, 255) , (self.bg_color, self.bg_color, self.bg_color))
         self.textRect = self.text.get_rect()
         self.textRect.x, self.textRect.y = round(0.015*self.WIDTH), round(0.03*self.HEIGHT)
-        pygame.display.set_caption('Spectrum Analyzer -- (FFT-Peak: %05d Hz)' %self.ear.strongest_frequency)
+        pygame.display.set_caption(': ) -- (FFT-Peak: %05d Hz)' %self.ear.strongest_frequency)
 
         self.plot_bars()
 
         #Draw text tags:
-        self.screen.blit(self.text, self.textRect)
+        # self.screen.blit(self.text, self.textRect)
         if len(self.bin_text_tags) > 0:
             cnt = 0
             for i in range(self.ear.n_frequency_bins):
@@ -177,8 +177,8 @@ class Spectrum_Visualizer:
                     self.screen.blit(self.bin_text_tags[cnt], self.bin_rectangles[cnt])
                     cnt += 1
 
-        self.history_button.draw(self.screen)
-        self.slow_bar_button.draw(self.screen)
+        # self.history_button.draw(self.screen)
+        # self.slow_bar_button.draw(self.screen)
 
         pygame.display.flip()
 
